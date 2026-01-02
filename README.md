@@ -5,11 +5,11 @@ A simple CLI application for reading all files in a dir using a glob and having 
 ## Example
 
 ```bash
-# Read all Rust source files
-readall "src/**/*.rs"
+# Read all Rust source files (use quotes to prevent shell expansion)
+readall 'src/**/*.rs'
 
 # Read multiple patterns
-readall "src/**/*.rs" "README.md" "Cargo.toml"
+readall 'src/**/*.rs' 'README.md' 'Cargo.toml'
 ```
 
 Output format:

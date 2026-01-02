@@ -2,31 +2,32 @@ use glob::glob;
 use std::{env, fs, path::PathBuf};
 
 fn main() {
-    let mut args: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
 
-    if args.iter().any(|a| a == "--help" || a == "-h") {
+    if args.len() > 1 && (args[1] == "--help" || args[1] == "-h") {
         println!(
             "Usage: readall [GLOB_PATTERNS...]
 
 Read all the files for copy-pasting.
 
 Examples:
-  readall \"src/**/*.rs\" \"README.md\"
+  readall 'src/**/*.rs' 'README.md'
+
+Note: Use quotes around glob patterns to prevent shell expansion.
 "
         );
         return;
     }
 
-    // Drop program name only
-    args.remove(0);
-
-    if args.is_empty() {
+    if args.len() < 2 {
         eprintln!("readall: no patterns provided (try --help)");
         std::process::exit(2);
     }
 
+    let patterns = &args[1..];
     let mut files: Vec<PathBuf> = Vec::new();
 
+    for pattern in patterns {
     for pattern in &args {
         match glob(pattern) {
             Ok(paths) => {
